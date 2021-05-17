@@ -1,8 +1,11 @@
+#![allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub enum Opcode {
     HLT,
     IGL,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Instruction {
     opcode: Opcode,
 }
@@ -10,7 +13,16 @@ pub struct Instruction {
 impl Instruction {
     pub fn new(opcode: Opcode) -> Self {
         Self {
-            opcode: Opcode,
+            opcode,
+        }
+    }
+}
+
+impl From<u8> for Opcode {
+    fn from(v: u8) -> Self {
+        return match v {
+            0 => Opcode::HLT,
+            _ => Opcode::IGL,
         }
     }
 }
@@ -26,8 +38,8 @@ mod tests {
     }
 
     #[test]
-    fn test_create_hlt() {
+    fn test_create_instruction() {
         let instruction = Instruction::new(Opcode::HLT);
-        assert_eq!(instruction, Opcode::HLT);
+        assert_eq!(instruction.opcode, Opcode::HLT);
     }
 }
