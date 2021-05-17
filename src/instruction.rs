@@ -3,6 +3,11 @@
 pub enum Opcode {
     HLT,
     IGL,
+    LOAD,
+    ADD,
+    SUB,
+    MULT,
+    DIV,
 }
 
 #[derive(Debug, PartialEq)]
