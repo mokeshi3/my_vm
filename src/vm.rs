@@ -31,13 +31,13 @@ impl VM {
 
     fn execute_instruction(&mut self) -> bool {
         if self.pc >= self.program.len() {
-            return false;
+            return true;
         }
 
         match self.decode_opecode() {
             Opcode::HLT => {
                 println!("HLT encountered");
-                return false;
+                return true;
             },
             Opcode::LOAD => {
                 let register = self.next_8_bits() as usize;
@@ -67,15 +67,16 @@ impl VM {
             },
             _ => {
                 println!("Unrecoginzed opcode found! Terminating!");
-                return false;
+                return true;
             }
         }
-        true
+        false
     }
 
     fn decode_opecode(&mut self) -> Opcode {
+        let result = Opcode::from(self.program[self.pc]);
         self.pc += 1;
-        Opcode::from(self.program[self.pc])
+        result
     }
 
     fn next_8_bits(&mut self) -> u8 {
@@ -107,7 +108,7 @@ mod tests {
     #[test]
     fn test_opcode_hlt() {
         let mut test_vm = VM::new();
-        let test_bytes = vec![0, 0, 0, 0];
+        let test_bytes = vec![5, 5, 5, 5];
         test_vm.program = test_bytes;
         test_vm.run();
         assert_eq!(test_vm.pc, 1);
@@ -116,7 +117,7 @@ mod tests {
     #[test]
     fn test_opcode_igl() {
         let mut test_vm = VM::new();
-        let test_bytes = vec![200, 0, 0, 0];
+        let test_bytes = vec![254, 0, 0, 0];
         test_vm.program = test_bytes;
         test_vm.run();
         assert_eq!(test_vm.pc, 1);
