@@ -54,7 +54,7 @@ impl VM {
                 let register2 = self.registers[self.next_8_bits() as usize];
                 self.registers[self.next_8_bits() as usize] = register1 - register2;
             },
-            Opcode::MULT => {
+            Opcode::MUL => {
                  let register1 = self.registers[self.next_8_bits() as usize];
                 let register2 = self.registers[self.next_8_bits() as usize];
                 self.registers[self.next_8_bits() as usize] = register1 * register2;
@@ -129,5 +129,46 @@ mod tests {
         test_vm.program = vec![0, 0, 1, 244];
         test_vm.run();
         assert_eq!(test_vm.registers[0], 500);
+    }
+
+    #[test]
+    fn test_add_opcode() {
+        let mut test_vm = VM::new();
+        let v1: u8 = 10;
+        let v2: u8 = 5;
+        test_vm.program = vec![0, 0, 0, v1, 0, 1, 0, 5, 1, 0, 1, 2];
+        test_vm.run();
+        assert_eq!(test_vm.registers[2], (v1+v2) as i32);
+    }
+
+    #[test]
+    fn test_sub_opcode() {
+        let mut test_vm = VM::new();
+        let v1: u8 = 10;
+        let v2: u8 = 5;
+        test_vm.program = vec![0, 0, 0, v1, 0, 1, 0, 5, 2, 0, 1, 2];
+        test_vm.run();
+        assert_eq!(test_vm.registers[2], (v1-v2) as i32);
+    }
+
+    #[test]
+    fn test_mul_opcode() {
+        let mut test_vm = VM::new();
+        let v1: u8 = 10;
+        let v2: u8 = 5;
+        test_vm.program = vec![0, 0, 0, v1, 0, 1, 0, 5, 3, 0, 1, 2];
+        test_vm.run();
+        assert_eq!(test_vm.registers[2], (v1*v2) as i32);
+    }
+
+    #[test]
+    fn test_div_opcode() {
+        let mut test_vm = VM::new();
+        let v1: u8 = 10;
+        let v2: u8 = 5;
+        test_vm.program = vec![0, 0, 0, v1, 0, 1, 0, 5, 4, 0, 1, 2];
+        test_vm.run();
+        assert_eq!(test_vm.registers[2], (v1/v2) as u32 as i32);
+        assert_eq!(test_vm.remainder, (v1%v2) as u32);
     }
 }

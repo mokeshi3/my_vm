@@ -6,7 +6,7 @@ pub enum Opcode {
     LOAD,
     ADD,
     SUB,
-    MULT,
+    MUL,
     DIV,
 }
 
@@ -27,6 +27,10 @@ impl From<u8> for Opcode {
     fn from(v: u8) -> Self {
         return match v {
             0 => Opcode::LOAD,
+            1 => Opcode::ADD,
+            2 => Opcode::SUB,
+            3 => Opcode::MUL,
+            4 => Opcode::DIV,
             5 => Opcode::HLT,
             _ => Opcode::IGL,
         }
