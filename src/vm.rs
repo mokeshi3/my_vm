@@ -65,6 +65,10 @@ impl VM {
                 self.registers[self.next_8_bits() as usize] = register1 / register2;
                 self.remainder = (register1 % register2) as u32;
             },
+            Opcode::JMP => {
+                let target = self.registers[self.next_8_bits() as usize];
+                self.pc = target as usize;
+            },
             _ => {
                 println!("Unrecoginzed opcode found! Terminating!");
                 return true;
@@ -170,5 +174,16 @@ mod tests {
         test_vm.run();
         assert_eq!(test_vm.registers[2], (v1/v2) as u32 as i32);
         assert_eq!(test_vm.remainder, (v1%v2) as u32);
+    }
+
+    #[test]
+    fn test_jmp_opcode() {
+        let mut test_vm = VM::new();
+        test_vm.registers[0] = 3;
+        test_vm.registers[1] = 2;
+        test_vm.registers[2] = 3;
+        test_vm.program = vec![6, 0, 5, 1, 1, 2, 3];
+        test_vm.run();
+        assert_eq!(test_vm.registers[3], 5);
     }
 }

@@ -1,13 +1,14 @@
 #![allow(dead_code)]
 #[derive(Debug, PartialEq)]
 pub enum Opcode {
-    HLT,
-    IGL,
     LOAD,
     ADD,
     SUB,
     MUL,
     DIV,
+    HLT,
+    JMP,
+    IGL,
 }
 
 #[derive(Debug, PartialEq)]
@@ -32,6 +33,7 @@ impl From<u8> for Opcode {
             3 => Opcode::MUL,
             4 => Opcode::DIV,
             5 => Opcode::HLT,
+            6 => Opcode::JMP,
             _ => Opcode::IGL,
         }
     }
