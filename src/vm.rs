@@ -69,6 +69,14 @@ impl VM {
                 let target = self.registers[self.next_8_bits() as usize];
                 self.pc = target as usize;
             },
+            Opcode::JMPF => {
+                let value = self.registers[self.next_8_bits() as usize];
+                self.pc += value as usize - 2;
+            },
+            Opcode::JMPB => {
+                let value = self.registers[self.next_8_bits() as usize];
+                self.pc -= value as usize + 2;
+            },
             _ => {
                 println!("Unrecoginzed opcode found! Terminating!");
                 return true;
@@ -185,5 +193,24 @@ mod tests {
         test_vm.program = vec![6, 0, 5, 1, 1, 2, 3];
         test_vm.run();
         assert_eq!(test_vm.registers[3], 5);
+    }
+
+    #[test]
+    fn test_jmpf_opcode() {
+        let mut test_vm = VM::new();
+        test_vm.registers[0] = 3;
+        test_vm.program = vec![7, 0, 5, 5, 5, 5, 5];
+        test_vm.run();
+        assert_eq!(test_vm.pc - 1, 3);
+    }
+
+    #[test]
+    fn test_jmpb_opcode() {
+        let mut test_vm = VM::new();
+        test_vm.registers[0] = 3;
+        test_vm.program = vec![5, 5, 5, 8, 0, 5, 5];
+        test_vm.pc = 3;
+        test_vm.run();
+        assert_eq!(test_vm.pc - 1, 0);
     }
 }
